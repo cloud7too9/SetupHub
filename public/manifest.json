@@ -1,0 +1,19 @@
+{
+  "name": "SetupHub",
+  "short_name": "SetupHub",
+  "description": "Mobiler UI-Baukasten für strukturierte Setups",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060709",
+  "theme_color": "#060709",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["developer tools", "design"]
+}

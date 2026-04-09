@@ -1,0 +1,21 @@
+export const lightTheme = {
+  name: 'light' as const,
+  colors: {
+    background: '#f4f5f7',
+    surface: '#ffffff',
+    surfaceAlt: '#ebedf0',
+    border: '#d1d5db',
+    borderSubtle: '#e5e7eb',
+    textPrimary: '#111827',
+    textSecondary: '#6b7280',
+    textTertiary: '#9ca3af',
+    accent: '#00b8d4',
+    accentMuted: 'rgba(0,184,212,0.10)',
+    accentHover: '#0097a7',
+    success: '#10b981',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    white: '#ffffff',
+    black: '#000000',
+  },
+};
