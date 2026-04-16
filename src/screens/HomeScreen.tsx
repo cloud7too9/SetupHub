@@ -3,7 +3,8 @@ import { Badge } from '@/ui/data-display/Badge';
 import { componentRegistry } from '@/features/catalog/data/component-registry';
 import { patternRegistry } from '@/features/catalog/data/pattern-registry';
 import { screenRegistry } from '@/features/catalog/data/screen-registry';
-import { Sparkles, LayoutGrid, Layers, Monitor } from 'lucide-react';
+import { kitRegistry } from '@/features/catalog/data/kit-registry';
+import { Sparkles, LayoutGrid, Layers, Monitor, Palette } from 'lucide-react';
 import { useNav } from '@/app/providers/NavigationProvider';
 
 export function HomeScreen() {
@@ -13,6 +14,7 @@ export function HomeScreen() {
     { icon: LayoutGrid, label: 'Components', count: componentRegistry.length, color: 'accent' as const, route: 'components' },
     { icon: Layers, label: 'Patterns', count: patternRegistry.length, color: 'success' as const, route: 'patterns' },
     { icon: Monitor, label: 'Screens', count: screenRegistry.length, color: 'warning' as const, route: 'screens' },
+    { icon: Palette, label: 'Kits', count: kitRegistry.length, color: 'accent' as const, route: 'kits' },
   ];
 
   return (

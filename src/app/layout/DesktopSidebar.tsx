@@ -3,6 +3,7 @@ import { Badge } from '@/ui/data-display/Badge';
 import { componentRegistry } from '@/features/catalog/data/component-registry';
 import { patternRegistry } from '@/features/catalog/data/pattern-registry';
 import { screenRegistry } from '@/features/catalog/data/screen-registry';
+import { kitRegistry } from '@/features/catalog/data/kit-registry';
 import { Sparkles } from 'lucide-react';
 
 interface Props {
@@ -14,6 +15,7 @@ const counts: Record<string, number> = {
   components: componentRegistry.length,
   patterns: patternRegistry.length,
   screens: screenRegistry.length,
+  kits: kitRegistry.length,
 };
 
 export function DesktopSidebar({ active, onNavigate }: Props) {
