@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { Home, LayoutGrid, Layers, Monitor, Settings } from 'lucide-react';
+import { Home, LayoutGrid, Layers, Monitor, Palette, Settings } from 'lucide-react';
 
 export interface RouteItem {
   id: string;
@@ -12,5 +12,6 @@ export const routes: RouteItem[] = [
   { id: 'components', label: 'Components', icon: LayoutGrid },
   { id: 'patterns', label: 'Patterns', icon: Layers },
   { id: 'screens', label: 'Screens', icon: Monitor },
+  { id: 'kits', label: 'Kits', icon: Palette },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];

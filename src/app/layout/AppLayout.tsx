@@ -30,6 +30,7 @@ export function AppLayout({ activeRoute, onNavigate, children }: AppLayoutProps)
     components: 'Components',
     patterns: 'Patterns',
     screens: 'Screens',
+    kits: 'Kits',
     settings: 'Settings',
   };
 
