@@ -23,6 +23,12 @@ function buildPath(points: [number, number][], curved: boolean): string {
   if (!curved) {
     for (let i = 1; i < points.length; i++) {
       d += ` L ${points[i]![0]} ${points[i]![1]}`;
+  const first = points[0]!;
+  let d = `M ${first[0]} ${first[1]}`;
+  if (!curved) {
+    for (let i = 1; i < points.length; i++) {
+      const p = points[i]!;
+      d += ` L ${p[0]} ${p[1]}`;
     }
   } else {
     for (let i = 1; i < points.length; i++) {
@@ -86,6 +92,11 @@ export function MiniLineChart({
         const pts = toPoints(s.data);
         const linePath = buildPath(pts, curved);
         const areaPath = linePath + ` L ${pts[pts.length - 1]![0]} ${chartH} L ${pts[0]![0]} ${chartH} Z`;
+        const last = pts[pts.length - 1];
+        const first = pts[0];
+        const areaPath = first && last
+          ? linePath + ` L ${last[0]} ${chartH} L ${first[0]} ${chartH} Z`
+          : linePath;
 
         return (
           <g key={idx}>
