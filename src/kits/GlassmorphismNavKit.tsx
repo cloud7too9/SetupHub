@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import { KitWrapper } from './shared/KitWrapper';
 import { GlassCard } from './shared/GlassCard';
 
