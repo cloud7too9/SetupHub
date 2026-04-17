@@ -70,7 +70,7 @@ export function GrowthKit() {
             ))}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {['9:00 am', '10:00 am', '11:00 am', '12:00 am'].map((time, i) => {
+            {['9:00 am', '10:00 am', '11:00 am', '12:00 am'].map((time) => {
               const event = events.find(e => e.time === time);
               return (
                 <div key={time} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

@@ -1,7 +1,6 @@
 import { KitWrapper } from './shared/KitWrapper';
 import { MiniLineChart } from './shared/MiniLineChart';
 import { MiniBarChart } from './shared/MiniBarChart';
-import { KitStatCard } from './shared/KitStatCard';
 
 const theme = {
   bg: '#0d0b0a',

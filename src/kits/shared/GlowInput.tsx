@@ -9,7 +9,7 @@ interface GlowInputProps {
   style?: CSSProperties;
 }
 
-export function GlowInput({ label, glowColor, icon, type = 'text', value, style }: GlowInputProps) {
+export function GlowInput({ label, glowColor, icon, value, style }: GlowInputProps) {
   return (
     <div style={{ position: 'relative', ...style }}>
       <div style={{

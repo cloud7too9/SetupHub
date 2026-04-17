@@ -1,9 +1,7 @@
-import type { CSSProperties } from 'react';
 import { KitWrapper } from './shared/KitWrapper';
 import { MiniBarChart } from './shared/MiniBarChart';
 import { MiniLineChart } from './shared/MiniLineChart';
 import { MiniDonutChart } from './shared/MiniDonutChart';
-import { KitStatCard } from './shared/KitStatCard';
 
 const theme = {
   bg: '#0f0d13',

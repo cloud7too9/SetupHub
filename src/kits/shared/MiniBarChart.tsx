@@ -28,8 +28,6 @@ export function MiniBarChart({
   style,
 }: MiniBarChartProps) {
   const max = Math.max(...data.map(d => d.value), 1);
-  const barWidth = 100 / data.length;
-  const padding = barWidth * 0.2;
   const labelSpace = showLabels ? 24 : 0;
   const valueSpace = showValues ? 16 : 0;
   const chartHeight = height - labelSpace - valueSpace;

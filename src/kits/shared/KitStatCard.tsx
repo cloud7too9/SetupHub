@@ -9,7 +9,7 @@ interface KitStatCardProps {
   style?: CSSProperties;
 }
 
-export function KitStatCard({ label, value, trend, trendUp, accent, style }: KitStatCardProps) {
+export function KitStatCard({ label, value, trend, trendUp, style }: KitStatCardProps) {
   return (
     <div style={{
       background: 'var(--surface)',
