@@ -4,6 +4,7 @@ import { BottomNav } from './BottomNav';
 import { Sidebar } from './Sidebar';
 import { DesktopSidebar } from './DesktopSidebar';
 import { ScreenContainer } from './ScreenContainer';
+import { routes } from '../routes/route-config';
 
 interface AppLayoutProps {
   activeRoute: string;
@@ -25,14 +26,7 @@ export function AppLayout({ activeRoute, onNavigate, children }: AppLayoutProps)
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isDesktop = useIsDesktop();
 
-  const labels: Record<string, string> = {
-    home: 'SetupHub',
-    components: 'Components',
-    patterns: 'Patterns',
-    screens: 'Screens',
-    kits: 'Kits',
-    settings: 'Settings',
-  };
+  const title = routes.find(r => r.id === activeRoute)?.label ?? 'SetupHub';
 
   if (isDesktop) {
     return (
@@ -46,7 +40,7 @@ export function AppLayout({ activeRoute, onNavigate, children }: AppLayoutProps)
             background: 'var(--surface)',
           }}>
             <span style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-1)' }}>
-              {labels[activeRoute] ?? 'SetupHub'}
+              {title}
             </span>
           </header>
           <main id="main-content" style={{
@@ -64,7 +58,7 @@ export function AppLayout({ activeRoute, onNavigate, children }: AppLayoutProps)
 
   return (
     <div style={{ minHeight: '100dvh', background: 'var(--bg)' }}>
-      <Topbar title={labels[activeRoute] ?? 'SetupHub'} onMenuOpen={() => setSidebarOpen(true)} />
+      <Topbar title={title} onMenuOpen={() => setSidebarOpen(true)} />
       <ScreenContainer>{children}</ScreenContainer>
       <BottomNav active={activeRoute} onChange={onNavigate} />
       <Sidebar

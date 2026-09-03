@@ -1,10 +1,7 @@
 import { Sheet } from '@/ui/feedback/Sheet';
 import { routes } from '../routes/route-config';
 import { Badge } from '@/ui/data-display/Badge';
-import { componentRegistry } from '@/features/catalog/data/component-registry';
-import { patternRegistry } from '@/features/catalog/data/pattern-registry';
-import { screenRegistry } from '@/features/catalog/data/screen-registry';
-import { kitRegistry } from '@/features/catalog/data/kit-registry';
+import { entries } from '@/catalog';
 import { Sparkles } from 'lucide-react';
 
 interface SidebarProps {
@@ -15,10 +12,7 @@ interface SidebarProps {
 }
 
 const counts: Record<string, number> = {
-  components: componentRegistry.length,
-  patterns: patternRegistry.length,
-  screens: screenRegistry.length,
-  kits: kitRegistry.length,
+  catalog: entries.length,
 };
 
 export function Sidebar({ open, onClose, active, onNavigate }: SidebarProps) {

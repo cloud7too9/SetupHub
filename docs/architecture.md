@@ -2,59 +2,78 @@
 
 ## Übersicht
 
-SetupHub ist ein mobiler UI-Baukasten — eine eigenständige Demo-App, die wiederverwendbare Komponenten, zusammengesetzte Patterns und fertige Screen-Layouts an einem Ort zeigt.
+SetupHub beschreibt einen UI-Baukasten so, dass ein Editor damit arbeiten kann.
+Der Katalog ist die Datenquelle, die App darin nur eine von mehreren möglichen
+Sichten.
 
-## Schichtentrennung
+## Schichten
 
 ```
-design-system/    Tokens, Themes, Icons — das visuelle Fundament
-ui/               Atomare Bausteine (Button, Card, Input …)
-patterns/         Zusammengesetzte Muster (Card+Actions, FormSection …)
-features/         App-spezifische Logik (Katalog, Settings)
-kits/             Eigenständige Stil-Kollektionen (eigene Palette statt Theme-Tokens)
-screens/          Fertige Seiten der Demo-App
-app/              Layout, Routing, Provider
+design-system/    Tokens und Themes — das visuelle Fundament
+ui/               Atomare Komponenten (Button, Card, Input …)
+patterns/         Zusammengesetzte Muster (Card+Aktionen, FormSection …)
+catalog/          Beschreibung der beiden Ebenen darüber
+app/ + screens/   Die Browser-Sicht auf den Katalog
 ```
 
-### Wiederverwendbarkeit
+Die Abhängigkeiten laufen strikt nach unten: `ui/` kennt weder `catalog/` noch
+`app/`. Deshalb lassen sich `design-system/`, `ui/` und `patterns/` unverändert
+in ein anderes Projekt übernehmen.
 
-`design-system/` + `ui/` + `patterns/` sind projektunabhängig und können 1:1 in andere Apps kopiert werden. `features/` und `screens/` sind SetupHub-spezifisch.
+## Katalog
 
-## Spacing-System
+`catalog/entries.ts` beschreibt jeden Eintrag serialisierbar — ohne JSX, ohne
+Funktionen. Das ist die Bedingung dafür, dass `scripts/emit-catalog.mjs` daraus
+`public/catalog.json` erzeugen kann.
 
-Alle Abstände nutzen CSS Custom Properties (`--sp-xs` bis `--sp-3xl`). Der ThemeProvider berechnet diese aus einem Faktor (0.75 = Kompakt, 1.0 = Normal, 1.25 = Locker) und schreibt sie live auf `:root`.
+Ein Eintrag trägt: `id`, `name`, `kind` (`component` oder `pattern`),
+`category`, `description`, `tags`, `source` (Import-Name, Modul, Dateipfad),
+`props` und `snippet`. Die Props sind kein Freitext, sondern typisiert: bei
+`enum` stehen die erlaubten Werte in `options`, Vorgaben in `default`. Ein
+Editor kann daraus direkt ein Eigenschaften-Panel bauen.
+
+Die Live-Vorschauen liegen bewusst daneben und nicht im Manifest — sie
+enthalten JSX. `catalog/previews.ts` sammelt alle `*.preview.tsx` per
+`import.meta.glob` ein und ordnet sie über ihre `id` zu. Eine Vorschau
+registriert sich damit selbst.
+
+### Einen Eintrag hinzufügen
+
+1. Komponente unter `ui/<kategorie>/<Name>/` anlegen, in `ui/index.ts` exportieren
+2. Eintrag in `catalog/entries.ts` ergänzen, `<Name>.preview.tsx` daneben legen
+
+`npm run check` vergleicht Manifest, Dateisystem, Barrel-Exporte und Vorschauen
+und bricht den Build ab, wenn eine Stelle fehlt. Vorher waren dafür vier
+Registries von Hand zu pflegen — der Kategoriefehler in der alten Export-Ansicht
+kam genau daher.
+
+## Komponenten-Regeln
+
+- **Eigenständig.** Props rein, UI raus, kein externer State.
+- **Tokens statt Werte.** `var(--accent)`, `var(--sp-md)`, `var(--radius-md)` —
+  keine festen Pixel für strukturelle Abstände, keine festen Farben.
+- **Touch-tauglich.** Mindestens 44px Tap-Target, Buttons 48px (`size="sm"`: 36px).
+- **Eine Vorschau.** Mindestens ein Abschnitt mit Varianten; interaktive
+  Komponenten brauchen einen Wrapper mit eigenem State.
+
+Kategorien: `actions`, `data-display`, `inputs`, `feedback` für Komponenten,
+`composite` für Patterns.
 
 ## Theming
 
-Die Paletten liegen in `design-system/themes/` (`darkTheme`, `lightTheme`) und werden vom ThemeProvider zur Laufzeit als CSS Custom Properties gesetzt. Die Auswahl wird unter `setuphub.theme` in `localStorage` gespeichert und beim Start validiert eingelesen.
+Die Paletten liegen in `design-system/themes/` und werden vom ThemeProvider zur
+Laufzeit als CSS Custom Properties auf `:root` gesetzt. Gesteuert werden Modus
+(Dark/Light), Akzentfarbe, Radius und Spacing; Radius und Spacing skalieren die
+jeweiligen Variablen aus einem Faktor. Die Auswahl liegt unter `setuphub.theme`
+in `localStorage` und wird beim Start validiert eingelesen.
 
-Der ThemeProvider verwaltet:
-- **Modus:** Dark / Light (Farbpalette per CSS-Variablen)
-- **Akzentfarbe:** 8 Optionen, live umschaltbar
-- **Radius:** 5 Stufen, skaliert alle `--radius-*` Variablen
-- **Spacing:** 3 Stufen, skaliert alle `--sp-*` Variablen
+`:root` in `styles/global.css` spiegelt die Dark-Palette als Fallback für den
+ersten Paint, bevor React läuft.
+
+Dieselben Tokens stehen im Manifest unter `tokens` — inklusive beider Themes.
 
 ## Navigation
 
-Hash-basiertes Routing ohne externe Bibliothek:
-- `NavigationProvider` synchronisiert `{ screen, detail }` mit `window.location.hash`
-- `AppRouter` rendert basierend auf State
-- `BottomNav` + `Sidebar` setzen den Screen
-- Detail-Ansichten über `openDetail(id)` / `goBack()` — Browser-History wird unterstützt
-
-## Katalog-System
-
-Jede Komponente registriert sich über:
-1. `component-registry.ts` — Metadaten (Name, Kategorie, Tags)
-2. `preview-registry.ts` — Live-Demos mit Sections
-3. `code-snippets.ts` — Nutzungsbeispiele mit Copy-to-Clipboard
-
-Kits laufen daneben über `kit-registry.tsx` und bringen ihre Farben selbst mit — sie sollen unabhängig vom aktiven Theme aussehen.
-
-## Stack
-
-- React 18 + TypeScript (strict mode)
-- Vite (Build + Dev-Server)
-- Lucide Icons
-- Inline Styles mit CSS Custom Properties
-- Keine externen UI-Bibliotheken
+Hash-basiert, ohne Bibliothek: `NavigationProvider` hält `{ screen, detail }`
+synchron mit `window.location.hash`, `AppRouter` rendert daraus. Zwei Routen
+(`catalog`, `settings`), Detailansichten über `#/catalog/<id>`.
