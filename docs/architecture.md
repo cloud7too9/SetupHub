@@ -47,6 +47,26 @@ und bricht den Build ab, wenn eine Stelle fehlt. Vorher waren dafür vier
 Registries von Hand zu pflegen — der Kategoriefehler in der alten Export-Ansicht
 kam genau daher.
 
+## Konfigurator
+
+`configurator/` macht aus einem Katalog-Eintrag eine live einstellbare Vorschau
+mit kopierbarem Code. Die Regler entstehen aus den `PropSpec`s des Manifests,
+nicht aus handgeschriebenem Wissen über die Komponente: `enum` wird zur
+Auswahlreihe, `boolean` und `function` zum Schalter, `string` und `number` zum
+Eingabefeld. `node`, `array` und `object` haben keinen sinnvollen Regler und
+werden übersprungen.
+
+Was sich aus dem Manifest nicht ableiten lässt, steht in `registry.tsx`: wie der
+Inhalt (`children`) gefüllt wird und wie daraus JSX entsteht. Ein Eintrag ohne
+diese Bindung zeigt schlicht keinen Konfigurator.
+
+Der erzeugte Code lässt Werte weg, die ohnehin die Vorgabe sind, ergänzt nötige
+Imports und benutzt dieselben Inline-Styles wie die Vorschau — er ist ohne
+Nacharbeit lauffähig.
+
+Weitere Einträge anbinden: ein `Configurable` in `configurator/registry.tsx`
+ergänzen, mehr braucht es nicht.
+
 ## Komponenten-Regeln
 
 - **Eigenständig.** Props rein, UI raus, kein externer State.

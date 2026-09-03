@@ -4,7 +4,9 @@ import { Card } from '@/ui/data-display/Card';
 import { Badge } from '@/ui/data-display/Badge';
 import { DetailHeader } from '@/patterns/mobile/DetailHeader';
 import { CodeBlock } from '@/patterns/preview/CodeBlock';
-import { Code2 } from 'lucide-react';
+import { ConfiguratorPanel } from '@/configurator/ConfiguratorPanel';
+import { configurableFor } from '@/configurator/registry';
+import { Code2, SlidersHorizontal } from 'lucide-react';
 
 interface Props {
   entryId: string;
@@ -75,6 +77,13 @@ export function EntryDetailScreen({ entryId, onBack }: Props) {
       <div style={{ display: 'flex', gap: 'var(--sp-xs)', flexWrap: 'wrap' }}>
         {entry.tags.map(tag => <Badge key={tag} color="neutral">{tag}</Badge>)}
       </div>
+
+      {configurableFor(entry.id) && (
+        <div>
+          <SectionTitle><SlidersHorizontal size={14} />Konfigurator</SectionTitle>
+          <ConfiguratorPanel entry={entry} />
+        </div>
+      )}
 
       {preview?.sections.map((section, i) => (
         <div key={i}>

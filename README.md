@@ -33,6 +33,13 @@ Dazu im selben Dokument die Tokens — Farben, Abstände, Radien, Schatten,
 Typografie und beide Themes —, damit der Editor den Gestaltungsspielraum kennt,
 statt ihn zu erraten.
 
+## Konfigurator
+
+Einträge mit Konfigurator-Bindung (aktuell `Card`) haben in der Detailansicht
+Regler für ihre Props und den Inhalt, eine Live-Vorschau und den passenden Code
+zum Kopieren. Die Regler kommen aus dem Manifest — dieselbe Mechanik, die auch
+ein externer Editor nutzen würde.
+
 ## Nutzung
 
 ```bash
@@ -54,6 +61,7 @@ src/
   ui/             21 atomare Komponenten
   patterns/       9 zusammengesetzte Muster
   catalog/        Manifest: Metadaten, Props, Snippets, Vorschau-Zuordnung
+  configurator/   Regler aus PropSpecs, Live-Vorschau, Code-Erzeugung
   app/            Layout, Routing, Provider
   screens/        Katalogliste und Detailansicht
 scripts/          Generator und Konsistenztest
