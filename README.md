@@ -12,7 +12,8 @@ Mobiler UI-Baukasten + Demo-App für strukturierte Setups.
 - **21 Komponenten** — Button, Card, Badge, Input, Toggle, Tabs, Chips, Dropdown, Avatar, ListItem, Divider, SearchField, Sheet, Modal, Toast, Progress, Skeleton, EmptyState, LoadingState, ErrorState, IconButton
 - **9 Patterns** — Card+Aktionen, Liste+Suche, Formularbereich, Detailkopf, Aktionsleiste, Info-Panel, Statistik-Cards, Avatar-Gruppe, Benachrichtigungen
 - **7 Screens** — Dashboard, Detailansicht, Formular, Liste, Profil, Onboarding, Einstellungen
-- **Live Theming** — Dark/Light, 8 Akzentfarben, 5 Radius-Stufen, 3 Spacing-Stufen
+- **4 Kits** — Glassmorphism, Neon/Glow, Gradient Dark, Minimal Dark: eigenständige Stil-Kollektionen mit eigener Palette
+- **Live Theming** — Dark/Light, 8 Akzentfarben, 5 Radius-Stufen, 3 Spacing-Stufen; Auswahl wird lokal gespeichert
 - **Accessibility** — ARIA-Attribute, Keyboard-Navigation, Skip-Link, Focus-Ringe
 - **Responsive** — Mobile-first mit Desktop-Sidebar ab 768px
 - **PWA** — Installierbar, Offline-fähig
@@ -41,6 +42,7 @@ src/
   ui/             Wiederverwendbare atomare Bausteine
   patterns/       Zusammengesetzte UI-Muster
   features/       SetupHub-spezifische Logik
+  kits/           Eigenständige Stil-Kollektionen mit eigener Palette
   screens/        Fertige Seiten
   app/            Layout, Routing, Provider
 docs/             Architektur, Richtlinien, Roadmap

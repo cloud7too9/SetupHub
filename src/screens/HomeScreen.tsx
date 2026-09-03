@@ -6,6 +6,7 @@ import { screenRegistry } from '@/features/catalog/data/screen-registry';
 import { kitRegistry } from '@/features/catalog/data/kit-registry';
 import { Sparkles, LayoutGrid, Layers, Monitor, Palette } from 'lucide-react';
 import { useNav } from '@/app/providers/NavigationProvider';
+import { APP_VERSION } from '@/app/version';
 
 export function HomeScreen() {
   const { navigate } = useNav();
@@ -50,8 +51,8 @@ export function HomeScreen() {
 
       <Card variant="accent" padding="md">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-xs)' }}>
-          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>v0.3</span>
-          <span style={{ fontSize: '14px', color: 'var(--text-2)' }}>Katalog, Patterns, Screens und Live-Theming.</span>
+          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>v{APP_VERSION}</span>
+          <span style={{ fontSize: '14px', color: 'var(--text-2)' }}>Katalog, Patterns, Screens, Kits und Live-Theming.</span>
         </div>
       </Card>
     </div>

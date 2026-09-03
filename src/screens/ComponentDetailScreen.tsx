@@ -64,7 +64,7 @@ export function ComponentDetailScreen({ componentId, onBack }: Props) {
         </div>
       )}
 
-      <SourceView componentId={componentId} componentName={entry.name} />
+      <SourceView componentName={entry.name} category={entry.category} />
     </div>
   );
 }

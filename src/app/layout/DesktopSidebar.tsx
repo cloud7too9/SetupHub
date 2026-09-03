@@ -5,6 +5,7 @@ import { patternRegistry } from '@/features/catalog/data/pattern-registry';
 import { screenRegistry } from '@/features/catalog/data/screen-registry';
 import { kitRegistry } from '@/features/catalog/data/kit-registry';
 import { Sparkles } from 'lucide-react';
+import { APP_VERSION } from '@/app/version';
 
 interface Props {
   active: string;
@@ -75,7 +76,7 @@ export function DesktopSidebar({ active, onNavigate }: Props) {
         padding: 'var(--sp-lg) var(--sp-xl)',
         borderTop: '1px solid var(--border-subtle)',
       }}>
-        <span style={{ fontSize: '12px', color: 'var(--text-3)' }}>SetupHub v0.3 — Mobiler UI-Baukasten</span>
+        <span style={{ fontSize: '12px', color: 'var(--text-3)' }}>SetupHub v{APP_VERSION} — Mobiler UI-Baukasten</span>
       </div>
     </aside>
   );

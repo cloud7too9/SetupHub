@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { darkTheme, lightTheme } from '@/design-system/themes';
 
 export interface ThemeConfig {
   mode: 'dark' | 'light';
@@ -14,6 +15,8 @@ const defaultConfig: ThemeConfig = {
   spacing: 1,
 };
 
+const STORAGE_KEY = 'setuphub.theme';
+
 interface ThemeCtx {
   config: ThemeConfig;
   update: (partial: Partial<ThemeConfig>) => void;
@@ -28,39 +31,37 @@ const Ctx = createContext<ThemeCtx>({
 
 export const useTheme = () => useContext(Ctx);
 
-const darkColors: Record<string, string> = {
-  bg: '#060709',
-  surface: '#0d0f14',
-  'surface-alt': '#13161d',
-  border: '#1e2230',
-  'border-subtle': '#161a24',
-  'text-1': '#e8eaed',
-  'text-2': '#8b8fa3',
-  'text-3': '#565a6e',
-  success: '#34d399',
-  warning: '#fbbf24',
-  error: '#f87171',
-  'shadow-sm': '0 1px 3px rgba(0,0,0,0.4)',
-  'shadow-md': '0 4px 12px rgba(0,0,0,0.5)',
-  'shadow-lg': '0 8px 24px rgba(0,0,0,0.6)',
-};
+const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min), max);
 
-const lightColors: Record<string, string> = {
-  bg: '#f4f5f7',
-  surface: '#ffffff',
-  'surface-alt': '#ebedf0',
-  border: '#d1d5db',
-  'border-subtle': '#e5e7eb',
-  'text-1': '#111827',
-  'text-2': '#6b7280',
-  'text-3': '#9ca3af',
-  success: '#059669',
-  warning: '#d97706',
-  error: '#dc2626',
-  'shadow-sm': '0 1px 3px rgba(0,0,0,0.08)',
-  'shadow-md': '0 4px 12px rgba(0,0,0,0.1)',
-  'shadow-lg': '0 8px 24px rgba(0,0,0,0.12)',
-};
+// Der Speicher ist manipulierbar und kann aus einer älteren Version stammen —
+// jedes Feld einzeln prüfen, sonst landen z.B. NaN-Werte in hexToRgb().
+function loadConfig(): ThemeConfig {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultConfig;
+    const saved = JSON.parse(raw) as Partial<ThemeConfig>;
+    return {
+      mode: saved.mode === 'light' || saved.mode === 'dark' ? saved.mode : defaultConfig.mode,
+      accent: typeof saved.accent === 'string' && /^#[0-9a-f]{6}$/i.test(saved.accent)
+        ? saved.accent
+        : defaultConfig.accent,
+      radius: typeof saved.radius === 'number' && Number.isFinite(saved.radius)
+        ? clamp(saved.radius, 0, 48)
+        : defaultConfig.radius,
+      spacing: typeof saved.spacing === 'number' && Number.isFinite(saved.spacing)
+        ? clamp(saved.spacing, 0.5, 2)
+        : defaultConfig.spacing,
+    };
+  } catch {
+    return defaultConfig; // Speicher gesperrt (Private Mode) oder kaputtes JSON
+  }
+}
+
+function saveConfig(config: ThemeConfig) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+  } catch { /* Speicher nicht verfügbar — Theming funktioniert trotzdem */ }
+}
 
 function hexToRgb(hex: string): string {
   const r = parseInt(hex.slice(1, 3), 16);
@@ -71,9 +72,9 @@ function hexToRgb(hex: string): string {
 
 function applyConfig(config: ThemeConfig) {
   const root = document.documentElement;
-  const colors = config.mode === 'dark' ? darkColors : lightColors;
+  const palette = config.mode === 'dark' ? darkTheme : lightTheme;
 
-  for (const [key, val] of Object.entries(colors)) {
+  for (const [key, val] of Object.entries(palette)) {
     root.style.setProperty(`--${key}`, val);
   }
 
@@ -97,10 +98,13 @@ function applyConfig(config: ThemeConfig) {
   root.style.setProperty('--sp-2xl', `${Math.round(24 * s)}px`);
   root.style.setProperty('--sp-3xl', `${Math.round(32 * s)}px`);
   root.style.setProperty('--pad', `${Math.round(20 * s)}px`);
+
+  // Sonst bleibt die Browser-/Statusleiste auf dem Handy im Light Mode dunkel.
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', palette.bg);
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [config, setConfig] = useState<ThemeConfig>(defaultConfig);
+  const [config, setConfig] = useState<ThemeConfig>(loadConfig);
 
   const update = useCallback((partial: Partial<ThemeConfig>) => {
     setConfig(prev => ({ ...prev, ...partial }));
@@ -108,7 +112,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const reset = useCallback(() => setConfig(defaultConfig), []);
 
-  useEffect(() => { applyConfig(config); }, [config]);
+  useEffect(() => {
+    applyConfig(config);
+    saveConfig(config);
+  }, [config]);
 
   return <Ctx.Provider value={{ config, update, reset }}>{children}</Ctx.Provider>;
 }

@@ -5,8 +5,9 @@ import { CodeBlock } from './CodeBlock';
 import { FolderOpen } from 'lucide-react';
 
 interface SourceViewProps {
-  componentId: string;
   componentName: string;
+  /** Kategorie aus dem component-registry — bestimmt den Zielordner unter src/ui/. */
+  category: string;
 }
 
 const structureTemplate = (name: string, category: string) => `${category}/${name}/
@@ -15,34 +16,17 @@ const structureTemplate = (name: string, category: string) => `${category}/${nam
   ${name}.preview.tsx  — Live-Demo
   index.ts             — Re-Export`;
 
-const importTemplate = (name: string) =>
-`// 1. Ordner kopieren nach: src/ui/<kategorie>/${name}/
+const importTemplate = (name: string, category: string) =>
+`// 1. Ordner kopieren nach: src/ui/${category}/${name}/
 
 // 2. In ui/index.ts registrieren:
-export { ${name} } from './<kategorie>/${name}';
+export { ${name} } from './${category}/${name}';
 
 // 3. Nutzen:
 import { ${name} } from '@/ui';`;
 
-const categoryMap: Record<string, string> = {
-  actions: 'actions',
-  'data-display': 'data-display',
-  inputs: 'inputs',
-  feedback: 'feedback',
-};
-
-export function SourceView({ componentId, componentName }: SourceViewProps) {
+export function SourceView({ componentName, category }: SourceViewProps) {
   const [expanded, setExpanded] = useState(false);
-
-  // Derive category from registry
-  const category = categoryMap[
-    Object.keys(categoryMap).find(c =>
-      ['button', 'icon-button', 'tabs', 'chips', 'dropdown'].includes(componentId) ? c === 'actions' :
-      ['card', 'badge', 'divider', 'list-item', 'avatar'].includes(componentId) ? c === 'data-display' :
-      ['input', 'search-field', 'toggle'].includes(componentId) ? c === 'inputs' :
-      c === 'feedback'
-    ) ?? 'feedback'
-  ] ?? 'feedback';
 
   if (!expanded) {
     return (
@@ -72,7 +56,7 @@ export function SourceView({ componentId, componentName }: SourceViewProps) {
           {structureTemplate(componentName, category)}
         </pre>
       </Card>
-      <CodeBlock code={importTemplate(componentName)} language="tsx" />
+      <CodeBlock code={importTemplate(componentName, category)} language="tsx" />
       <Button variant="ghost" size="sm" onClick={() => setExpanded(false)} fullWidth>
         Einklappen
       </Button>

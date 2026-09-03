@@ -6,7 +6,7 @@ const variantStyles: Record<string, React.CSSProperties> = {
   default: { background: 'var(--surface)', border: '1px solid var(--border-subtle)' },
   outlined: { background: 'transparent', border: '1px solid var(--border)' },
   elevated: { background: 'var(--surface)', boxShadow: 'var(--shadow-md)' },
-  accent: { background: 'var(--accent-muted)', border: '1px solid rgba(0,229,255,0.15)' },
+  accent: { background: 'var(--accent-muted)', border: '1px solid color-mix(in srgb, var(--accent) 15%, transparent)' },
 };
 
 export function Card({ children, variant = 'default', padding = 'md', onClick, style }: CardProps) {
