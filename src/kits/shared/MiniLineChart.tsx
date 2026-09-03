@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import type { CSSProperties } from 'react';
 
 interface Series {
@@ -57,6 +58,10 @@ export function MiniLineChart({
 
   const viewW = 400;
 
+  // Ohne Instanz-Präfix teilen sich zwei Charts auf derselben Seite ihre
+  // Farbverläufe — die Kits sind zum Kopieren gedacht, das passiert schnell.
+  const gradientId = `lcg-${useId().replace(/:/g, '')}`;
+
   function toPoints(data: number[]): [number, number][] {
     return data.map((v, i) => [
       (i / (data.length - 1 || 1)) * viewW,
@@ -68,7 +73,7 @@ export function MiniLineChart({
     <svg viewBox={`0 0 ${viewW} ${height}`} preserveAspectRatio="none" style={{ width: '100%', height, display: 'block', ...style }}>
       <defs>
         {series.map((s, idx) => (
-          <linearGradient key={idx} id={`lcg-${idx}`} x1="0" y1="0" x2="0" y2="1">
+          <linearGradient key={idx} id={`${gradientId}-${idx}`} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={s.color} stopOpacity={s.fillOpacity ?? 0.3} />
             <stop offset="100%" stopColor={s.color} stopOpacity={0} />
           </linearGradient>
@@ -96,7 +101,7 @@ export function MiniLineChart({
         return (
           <g key={idx}>
             {(s.fillOpacity ?? 0.3) > 0 && (
-              <path d={areaPath} fill={`url(#lcg-${idx})`} />
+              <path d={areaPath} fill={`url(#${gradientId}-${idx})`} />
             )}
             <path d={linePath} fill="none" stroke={s.color} strokeWidth="2.5" strokeLinecap="round" />
             {showDots && pts.map((p, pi) => (

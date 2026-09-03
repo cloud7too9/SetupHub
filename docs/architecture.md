@@ -11,6 +11,7 @@ design-system/    Tokens, Themes, Icons — das visuelle Fundament
 ui/               Atomare Bausteine (Button, Card, Input …)
 patterns/         Zusammengesetzte Muster (Card+Actions, FormSection …)
 features/         App-spezifische Logik (Katalog, Settings)
+kits/             Eigenständige Stil-Kollektionen (eigene Palette statt Theme-Tokens)
 screens/          Fertige Seiten der Demo-App
 app/              Layout, Routing, Provider
 ```
@@ -24,6 +25,8 @@ app/              Layout, Routing, Provider
 Alle Abstände nutzen CSS Custom Properties (`--sp-xs` bis `--sp-3xl`). Der ThemeProvider berechnet diese aus einem Faktor (0.75 = Kompakt, 1.0 = Normal, 1.25 = Locker) und schreibt sie live auf `:root`.
 
 ## Theming
+
+Die Paletten liegen in `design-system/themes/` (`darkTheme`, `lightTheme`) und werden vom ThemeProvider zur Laufzeit als CSS Custom Properties gesetzt. Die Auswahl wird unter `setuphub.theme` in `localStorage` gespeichert und beim Start validiert eingelesen.
 
 Der ThemeProvider verwaltet:
 - **Modus:** Dark / Light (Farbpalette per CSS-Variablen)
@@ -45,6 +48,8 @@ Jede Komponente registriert sich über:
 1. `component-registry.ts` — Metadaten (Name, Kategorie, Tags)
 2. `preview-registry.ts` — Live-Demos mit Sections
 3. `code-snippets.ts` — Nutzungsbeispiele mit Copy-to-Clipboard
+
+Kits laufen daneben über `kit-registry.tsx` und bringen ihre Farben selbst mit — sie sollen unabhängig vom aktiven Theme aussehen.
 
 ## Stack
 
