@@ -34,3 +34,9 @@ Komponenten nutzen ausschließlich `var(--token-name)` in ihren Styles.
 - **Kein Re-Render**: Farbwechsel ohne React-Lifecycle
 - **Portabilität**: Tokens als TS = typsicher, exportierbar, dokumentiert
 - **Referenz**: Wer eine neue Komponente baut, sieht hier welche Werte existieren
+
+## Im Manifest
+
+Alle Token-Gruppen stehen zusätzlich in `catalog.json` unter `tokens` —
+Farben, Abstände, Radien, Schatten, Typografie und beide Themes. Ein Editor
+liest daraus den Gestaltungsspielraum, statt ihn zu erraten.

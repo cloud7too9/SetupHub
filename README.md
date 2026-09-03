@@ -1,60 +1,83 @@
 # SetupHub
 
-<!-- Netlify Badge -->
-[![Netlify Status](https://api.netlify.com/api/v1/badges/DEINE-SITE-ID/deploy-status)](https://app.netlify.com/sites/DEIN-SITE-NAME/deploys)
+UI-Katalog als Datenquelle für einen Editor: 21 Komponenten, 9 Patterns und die
+Design-Tokens — beschrieben in einem maschinenlesbaren Manifest, vorgeführt in
+einer schlanken Browser-App.
 
 **[→ Live Demo](https://DEIN-SITE-NAME.netlify.app)**
 
-Mobiler UI-Baukasten + Demo-App für strukturierte Setups.
+## Was das hier ist
 
-## Features
+Der Katalog ist die Schnittstelle. Ein Editor liest `catalog.json` (oder
+importiert `@/catalog` typisiert) und weiß dann für jeden Eintrag: wie er heißt,
+wo der Quellcode liegt, welche Props er hat, welche Werte erlaubt sind, was die
+Vorgaben sind und wie ein Aufruf aussieht. Die App daneben ist nur die Sicht auf
+dieselben Daten — kein zweiter Datenbestand.
 
-- **21 Komponenten** — Button, Card, Badge, Input, Toggle, Tabs, Chips, Dropdown, Avatar, ListItem, Divider, SearchField, Sheet, Modal, Toast, Progress, Skeleton, EmptyState, LoadingState, ErrorState, IconButton
-- **9 Patterns** — Card+Aktionen, Liste+Suche, Formularbereich, Detailkopf, Aktionsleiste, Info-Panel, Statistik-Cards, Avatar-Gruppe, Benachrichtigungen
-- **7 Screens** — Dashboard, Detailansicht, Formular, Liste, Profil, Onboarding, Einstellungen
-- **4 Kits** — Glassmorphism, Neon/Glow, Gradient Dark, Minimal Dark: eigenständige Stil-Kollektionen mit eigener Palette
-- **Live Theming** — Dark/Light, 8 Akzentfarben, 5 Radius-Stufen, 3 Spacing-Stufen; Auswahl wird lokal gespeichert
-- **Accessibility** — ARIA-Attribute, Keyboard-Navigation, Skip-Link, Focus-Ringe
-- **Responsive** — Mobile-first mit Desktop-Sidebar ab 768px
-- **PWA** — Installierbar, Offline-fähig
-- **Deeplinks** — Hash-basiertes Routing (`#/components/button`)
+```jsonc
+{
+  "id": "button",
+  "name": "Button",
+  "kind": "component",              // component | pattern
+  "category": "actions",
+  "source": { "named": "Button", "from": "@/ui", "path": "src/ui/actions/Button/Button.tsx" },
+  "props": [
+    { "name": "children", "type": "node", "required": true },
+    { "name": "variant", "type": "enum", "options": ["primary", "secondary", "ghost", "danger"], "default": "primary" }
+  ],
+  "snippet": "<Button variant=\"primary\">Erstellen</Button>"
+}
+```
 
-## Stack
+Dazu im selben Dokument die Tokens — Farben, Abstände, Radien, Schatten,
+Typografie und beide Themes —, damit der Editor den Gestaltungsspielraum kennt,
+statt ihn zu erraten.
 
-- React 18 + TypeScript (strict)
-- Vite
-- Lucide Icons
-- Custom Design System (DM Sans + JetBrains Mono)
-- Keine externen UI-Bibliotheken
-
-## Starten
+## Nutzung
 
 ```bash
 npm install
-npm run dev
+npm run dev       # App auf localhost:5173
+npm run catalog   # schreibt public/catalog.json
+npm run check     # prüft Katalog gegen Quellen und Vorschauen
+npm run build     # check + Typprüfung + Bundle
 ```
+
+Als JSON: `GET /catalog.json` auf der deployten Seite.
+Als TypeScript: `import { manifest, entries } from '@/catalog'` — voll typisiert.
 
 ## Struktur
 
 ```
 src/
-  design-system/  Tokens, Themes, Icons (Referenz-Dokumentation)
-  ui/             Wiederverwendbare atomare Bausteine
-  patterns/       Zusammengesetzte UI-Muster
-  features/       SetupHub-spezifische Logik
-  kits/           Eigenständige Stil-Kollektionen mit eigener Palette
-  screens/        Fertige Seiten
+  design-system/  Tokens und Themes — das visuelle Fundament
+  ui/             21 atomare Komponenten
+  patterns/       9 zusammengesetzte Muster
+  catalog/        Manifest: Metadaten, Props, Snippets, Vorschau-Zuordnung
   app/            Layout, Routing, Provider
-docs/             Architektur, Richtlinien, Roadmap
+  screens/        Katalogliste und Detailansicht
+scripts/          Generator und Konsistenztest
 ```
+
+`design-system/`, `ui/` und `patterns/` sind projektunabhängig und lassen sich
+1:1 übernehmen.
+
+## Einen Eintrag hinzufügen
+
+Zwei Stellen, mehr nicht:
+
+1. Komponente bauen (`ui/<kategorie>/<Name>/`) und im Barrel `ui/index.ts` exportieren
+2. Eintrag in `catalog/entries.ts` ergänzen und eine `<Name>.preview.tsx` daneben legen
+
+Die Vorschau wird automatisch über ihre `id` zugeordnet — keine Registry, in die
+man sie zusätzlich eintragen muss. `npm run check` meldet, wenn etwas fehlt.
+
+## Stack
+
+React 18, TypeScript (strict), Vite, Lucide Icons. Keine UI-Bibliothek,
+kein Router, kein State-Manager.
 
 ## Dokumentation
 
-- [Architektur](docs/architecture.md) — Schichtentrennung, Theming, Navigation
-- [Komponenten-Richtlinien](docs/component-guidelines.md) — Regeln für neue Bausteine
-- [Roadmap](docs/roadmap.md) — Versionshistorie
-
-## Wiederverwendung
-
-`ui/` + `design-system/` + `patterns/` sind projektunabhängig.
-Jede Komponente hat einen Export-Button im Katalog mit Kopieranleitung.
+- [Architektur](docs/architecture.md) — Schichten, Katalog, Theming
+- [Design System](src/design-system/README.md) — Tokens und ihre CSS-Variablen

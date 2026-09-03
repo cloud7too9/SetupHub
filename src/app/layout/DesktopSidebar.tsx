@@ -1,11 +1,7 @@
 import { routes } from '../routes/route-config';
 import { Badge } from '@/ui/data-display/Badge';
-import { componentRegistry } from '@/features/catalog/data/component-registry';
-import { patternRegistry } from '@/features/catalog/data/pattern-registry';
-import { screenRegistry } from '@/features/catalog/data/screen-registry';
-import { kitRegistry } from '@/features/catalog/data/kit-registry';
+import { entries, manifest } from '@/catalog';
 import { Sparkles } from 'lucide-react';
-import { APP_VERSION } from '@/app/version';
 
 interface Props {
   active: string;
@@ -13,10 +9,7 @@ interface Props {
 }
 
 const counts: Record<string, number> = {
-  components: componentRegistry.length,
-  patterns: patternRegistry.length,
-  screens: screenRegistry.length,
-  kits: kitRegistry.length,
+  catalog: entries.length,
 };
 
 export function DesktopSidebar({ active, onNavigate }: Props) {
@@ -76,7 +69,7 @@ export function DesktopSidebar({ active, onNavigate }: Props) {
         padding: 'var(--sp-lg) var(--sp-xl)',
         borderTop: '1px solid var(--border-subtle)',
       }}>
-        <span style={{ fontSize: '12px', color: 'var(--text-3)' }}>SetupHub v{APP_VERSION} — Mobiler UI-Baukasten</span>
+        <span style={{ fontSize: '12px', color: 'var(--text-3)' }}>SetupHub v{manifest.version} — UI-Katalog</span>
       </div>
     </aside>
   );

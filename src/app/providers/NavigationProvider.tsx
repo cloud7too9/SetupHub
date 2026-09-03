@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { defaultRoute } from '../routes/route-config';
 
 interface NavState {
   screen: string;
@@ -13,7 +14,7 @@ interface NavCtx {
 }
 
 const Ctx = createContext<NavCtx>({
-  state: { screen: 'home', detail: null },
+  state: { screen: defaultRoute, detail: null },
   navigate: () => {},
   openDetail: () => {},
   goBack: () => {},
@@ -23,10 +24,10 @@ export const useNav = () => useContext(Ctx);
 
 function parseHash(): NavState {
   const hash = window.location.hash.replace('#/', '').replace('#', '');
-  if (!hash) return { screen: 'home', detail: null };
+  if (!hash) return { screen: defaultRoute, detail: null };
   const parts = hash.split('/');
   return {
-    screen: parts[0] ?? 'home',
+    screen: parts[0] ?? defaultRoute,
     detail: parts[1] ?? null,
   };
 }
